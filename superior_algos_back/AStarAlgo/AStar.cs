@@ -71,7 +71,7 @@ namespace superior_algos_back.AStarAlgo
                 }
                 
                 currentCell = currentCell.NearestCells.Where(c=> c != null).Any(c => c.Type == CellType.End) ?
-                    currentCell.NearestCells.Where(c => c.Type == CellType.End).FirstOrDefault() :
+                    currentCell.NearestCells.Where(c => c!= null && c.Type == CellType.End).FirstOrDefault() :
                     OpenBank.Where(c => c != null).MinBy(c => c.Cost);
 
                 OpenBank.Remove(currentCell);
