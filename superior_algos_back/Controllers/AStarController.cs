@@ -11,9 +11,18 @@ namespace superior_algos_back.Controllers
     public class AStarController : ControllerBase
     {
         [HttpPost]
+        [Route("route")]
         public IActionResult FindRoute([FromBody]List<List<int>> field)
         {
             return Ok(AStar.FindRoute(field));
+        }
+
+        [HttpGet]
+        [Route("maze")]
+        public IActionResult GetMaze(int size)
+        {
+            MazeGenerator generator = new MazeGenerator();
+            return Ok(generator.Generate(size));
         }
     }
 }

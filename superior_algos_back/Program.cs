@@ -26,6 +26,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+MazeGenerator maze = new MazeGenerator();
+var m = maze.Generate(5);
+
 app.MapControllers();
 app.UseCors();
 app.Run();

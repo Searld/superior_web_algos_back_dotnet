@@ -14,7 +14,6 @@ namespace superior_algos_back.AStarAlgo
 
         public static Cell Start { get; set; }
         public static Cell End { get; set; }
-        public static List<Cell> OpenBank {  get; set; } = new List<Cell>();
 
         public static int CountManhattanDistance(Cell start, Cell end)
         {
@@ -47,10 +46,11 @@ namespace superior_algos_back.AStarAlgo
             }
         }
 
-        public static Route FindRoute(List<List<int>> field)
+        public static AStarRequest FindRoute(List<List<int>> field)
         {
             InitializeField(field, field.Count);
-
+            List<AStarStep> steps = new List<AStarStep>();
+            List<Cell> OpenBank = new List<Cell>();
             Cell currentCell = Start;
             currentCell.IsVisited = true;
 
@@ -74,6 +74,12 @@ namespace superior_algos_back.AStarAlgo
                     currentCell.NearestCells.Where(c => c!= null && c.Type == CellType.End).FirstOrDefault() :
                     OpenBank.Where(c => c != null).MinBy(c => c.Cost);
 
+                AStarStep aStarStep = new AStarStep();
+                aStarStep.OpenBank = OpenBank.Select(c => c.Index).ToList();
+                aStarStep.CurrentCell = currentCell.Index;
+
+                steps.Add(aStarStep);
+
                 OpenBank.Remove(currentCell);
                 currentCell.IsVisited = true;
             }
@@ -83,7 +89,11 @@ namespace superior_algos_back.AStarAlgo
                 currentCell = currentCell.Previous;
                 route.Indexes.Add(currentCell.Index);
             }
-            return route;
+
+            AStarRequest request = new AStarRequest();
+            request.Route = route;
+            request.Steps = steps;
+            return request;
         }
 
     }
