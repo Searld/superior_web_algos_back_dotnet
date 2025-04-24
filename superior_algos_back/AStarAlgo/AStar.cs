@@ -49,6 +49,8 @@ namespace superior_algos_back.AStarAlgo
         public static AStarRequest FindRoute(List<List<int>> field)
         {
             InitializeField(field, field.Count);
+            if(Start == null || End == null)
+                return new AStarRequest();
             List<AStarStep> steps = new List<AStarStep>();
             List<Cell> OpenBank = new List<Cell>();
             Cell currentCell = Start;
@@ -60,7 +62,7 @@ namespace superior_algos_back.AStarAlgo
             {
                 for (int i = 0; i < currentCell.NearestCells.Count; i++)
                 {
-                    if (currentCell.NearestCells[i]!= null && !currentCell.NearestCells[i].IsVisited)
+                    if (currentCell.NearestCells[i] != null && !currentCell.NearestCells[i].IsVisited)
                     {
                         currentCell.NearestCells[i].PathLength = currentCell.PathLength + 10;
                         currentCell.NearestCells[i].Cost = currentCell.NearestCells[i].PathLength +
@@ -69,7 +71,10 @@ namespace superior_algos_back.AStarAlgo
                         OpenBank.Add(currentCell.NearestCells[i]);
                     }
                 }
-                
+
+                if (OpenBank.Count == 0 && currentCell.NearestCells.Where(c=> c!= null).All(c =>c.IsVisited))
+                    return new AStarRequest();
+
                 currentCell = currentCell.NearestCells.Where(c=> c != null).Any(c => c.Type == CellType.End) ?
                     currentCell.NearestCells.Where(c => c!= null && c.Type == CellType.End).FirstOrDefault() :
                     OpenBank.Where(c => c != null).MinBy(c => c.Cost);
