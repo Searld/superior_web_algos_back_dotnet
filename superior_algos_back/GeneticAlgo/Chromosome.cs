@@ -16,7 +16,7 @@
 
         public void CountLength()
         {
-            for (int i = 1; i < Vertices.Count; i++)
+            for (int i = 1; i < Vertices.Count-1; i++)
             {
                 Length += Vertices[i].GetDistance(Vertices[i - 1]);
             }

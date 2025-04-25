@@ -11,7 +11,7 @@
         private double _maxStagnationGenerations = 20;
         private Random _random = new Random();
 
-        public List<Vertex> GetRoute(List<Vertex> source)
+        public List<List<Vertex>> GetRoute(List<Vertex> source)
         {
             var population = new Population(source, _sizeOfPopulation);
 
@@ -43,10 +43,11 @@
                 if (_stagnationCounter >= _maxStagnationGenerations)
                     break;
             }
+
             population.Chromosomes[0].Vertices.Add(new Vertex(population.Chromosomes[0].Vertices[0].Id,
                 population.Chromosomes[0].Vertices[0].X, population.Chromosomes[0].Vertices[0].Y));
 
-            return population.Chromosomes[0].Vertices;
+            return population.Chromosomes.Select(c=> c.Vertices).Take(new Range(_sizeOfPopulation - 10, _sizeOfPopulation)).ToList();
         }
 
         private Chromosome Cross(Chromosome parent1, Chromosome parent2)
